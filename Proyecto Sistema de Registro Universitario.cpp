@@ -686,6 +686,88 @@ void controlNotas(vector<Estudiante>& estudiantes) {
 
     } while (opcion != 4);
 }
+void calcularPromedio(const Estudiante& estudiante, float& promedioGeneral, int& cursosAprobados, int& cursosReprobados) {
+    float sumaNotas = 0;
+    cursosAprobados = 0;
+    cursosReprobados = 0;
+
+    for (const auto& curso : estudiante.cursos) {
+        sumaNotas += curso.notaFinal;
+        if (curso.notaFinal >= 60) {
+            cursosAprobados++;
+        } else {
+            cursosReprobados++;
+        }
+    }
+
+    promedioGeneral = (estudiante.cursos.size() > 0) ? (sumaNotas / estudiante.cursos.size()) : 0;
+}
+
+void reportesAcademicos(const vector<Estudiante>& estudiantes) {
+
+    if (estudiantes.empty()) {
+        cout << "No hay estudiantes registrados.\n";
+        return;
+    }
+
+    cout << "Seleccione un estudiante para ver el reporte academico:\n";
+    for (int i = 0; i < estudiantes.size(); i++) {
+        cout << i + 1 << ". " << estudiantes[i].nombres << " " << estudiantes[i].apellidos 
+             << " | Codigo: " << estudiantes[i].codigo << endl;
+    }
+
+    int estudianteSeleccionado;
+    cout << "Selecciona un estudiante por numero: ";
+    cin >> estudianteSeleccionado;
+
+    if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
+        cout << "Seleccion de estudiante invalida.\n";
+        return;
+    }
+
+    const Estudiante& estudiante = estudiantes[estudianteSeleccionado - 1];
+
+    cout << "Datos Generales del Estudiante:\n";
+    cout << "Nombres: " << estudiante.nombres << endl;
+    cout << "Apellidos: " << estudiante.apellidos << endl;
+    cout << "Codigo: " << estudiante.codigo << endl;
+    cout << "Carrera: " << estudiante.carrera << endl; 
+
+    cout << "\nCursos Asignados:\n";
+    if (estudiante.cursos.empty()) {
+        cout << "El estudiante no tiene cursos asignados.\n";
+    } else {
+        for (const auto& curso : estudiante.cursos) {
+            cout << "- " << curso.nombre << " (Codigo: " << curso.codigo << ")\n";
+        }
+    }
+
+    cout << "\nNotas:\n";
+    if (estudiante.cursos.empty()) {
+        cout << "No hay notas registradas para este estudiante.\n";
+    } else {
+        for (const auto& curso : estudiante.cursos) {
+            cout << "Curso: " << curso.nombre << endl;
+            cout << "Nota del Primer Parcial: " << curso.notasPrimerParcial << endl;
+            cout << "Nota del Segundo Parcial: " << curso.notasSegundoParcial << endl;
+            cout << "Nota del Examen Final: " << curso.notasExamenFinal << endl;
+            cout << "Nota Final: " << curso.notaFinal << endl;
+            string estado = (curso.notaFinal >= 60) ? "Aprobado" : "Reprobado";
+            cout << "Estado del Curso: " << estado << endl;
+            cout << "--------------------------------\n"; 
+        }
+    }
+
+ 
+    float promedioGeneral;
+    int cursosAprobados, cursosReprobados;
+
+    calcularPromedio(estudiante, promedioGeneral, cursosAprobados, cursosReprobados);
+
+    cout << "Promedio General: " << fixed << setprecision(2) << promedioGeneral << endl;
+    cout << "Materias Aprobadas: " << cursosAprobados << endl;
+    cout << "Materias Reprobadas: " << cursosReprobados << endl;
+}
 void mostrarMenu() {	
     cout << "================================================================" << endl;
     cout << "Sistema de Registro Universitario" << endl;
@@ -718,7 +800,7 @@ int main() {
 		        controlNotas(estudiantes);
                 break;
             case 4:
-
+				reportesAcademicos(estudiantes);
                 break;
             case 5:
                 cout << "" << endl;
