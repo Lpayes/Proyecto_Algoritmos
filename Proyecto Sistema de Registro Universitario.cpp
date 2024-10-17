@@ -464,7 +464,228 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
         cout << "Codigo de curso invalido.\n";
     }
 }
+void registroNotasParciales(vector<Estudiante>& estudiantes) {
+    if (estudiantes.empty()) {
+        cout << "No hay estudiantes registrados.\n";
+        return;
+    }
 
+    cout << "Seleccione un estudiante para registrar notas parciales: " << endl;
+    for (int i = 0; i < estudiantes.size(); i++) {
+        cout << i + 1 << ". " << estudiantes[i].nombres << " " << estudiantes[i].apellidos 
+             << " | Código: " << estudiantes[i].codigo << endl;
+    }
+
+    int estudianteSeleccionado;
+    do {
+        cout << "Selecciona un estudiante por numero: ";
+        cin >> estudianteSeleccionado;
+
+        if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
+            cout << "Selección de estudiante invalida. Por favor, seleccione un numero de estudiante valido." << endl;
+        }
+    } while (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size());
+
+    Estudiante& estudiante = estudiantes[estudianteSeleccionado - 1];
+
+    if (estudiante.cursos.empty()) {
+        cout << "El estudiante no tiene cursos asignados.\n";
+        return;
+    }
+
+    cout << "Cursos asignados a " << estudiante.nombres << " " << estudiante.apellidos << ":\n";
+    for (int i = 0; i < estudiante.cursos.size(); i++) {
+        cout << i + 1 << ". " << estudiante.cursos[i].nombre << " (Codigo: " << estudiante.cursos[i].codigo << ")\n";
+    }
+
+    int cursoSeleccionado;
+    
+    do {
+        cout << "Selecciona un curso por numero: ";
+        cin >> cursoSeleccionado;
+
+        if (cursoSeleccionado < 1 || cursoSeleccionado > estudiante.cursos.size()) {
+            cout << "Selección de curso invalida. Por favor, seleccione un numero de curso valido." << endl;
+        }
+    } while (cursoSeleccionado < 1 || cursoSeleccionado > estudiante.cursos.size());
+
+    Curso& curso = estudiante.cursos[cursoSeleccionado - 1];
+
+    float nota1, nota2, notaExamen;
+
+    do {
+        cout << "Ingrese la nota del primer parcial para el curso " << curso.nombre << ": ";
+        cin >> nota1;
+        if (nota1 < 0 || nota1 > 15) {
+            cout << "Nota invalida. Debe estar entre 0 y 15.\n";
+        }
+    } while (nota1 < 0 || nota1 > 15);
+
+    do {
+        cout << "Ingrese la nota del segundo parcial para el curso " << curso.nombre << ": ";
+        cin >> nota2;
+        if (nota2 < 0 || nota2 > 15) {
+            cout << "Nota invalida. Debe estar entre 0 y 15.\n";
+        }
+    } while (nota2 < 0 || nota2 > 15);
+
+    do {
+        cout << "Ingrese la nota del examen final para el curso " << curso.nombre << " (0 a 70): ";
+        cin >> notaExamen;
+        if (notaExamen < 0 || notaExamen > 70) {
+            cout << "Nota invalida. Debe estar entre 0 y 70.\n";
+        }
+    } while (notaExamen < 0 || notaExamen > 70);
+
+    curso.notasPrimerParcial = nota1;
+    curso.notasSegundoParcial = nota2;
+    curso.notasExamenFinal = notaExamen;
+
+    curso.notaFinal = nota1 + nota2 + notaExamen;
+
+    cout << "Notas registradas correctamente para el curso: " << curso.nombre << endl;
+}
+void notaFinalDelCurso(const vector<Estudiante>& estudiantes) {
+    if (estudiantes.empty()) {
+        cout << "No hay estudiantes registrados.\n";
+        return;
+    }
+    
+    set<string> cursosUnicos;
+    for (const auto& estudiante : estudiantes) {
+        for (const auto& curso : estudiante.cursos) {
+            cursosUnicos.insert(curso.nombre); 
+        }
+    }
+
+    cout << "Cursos disponibles:\n";
+    int indiceCurso = 1;
+    map<int, string> cursoMapa;
+    for (const auto& curso : cursosUnicos) {
+        cout << indiceCurso++ << ". " << curso << endl;
+        cursoMapa[indiceCurso - 1] = curso;
+    }
+
+    int cursoSeleccionado;
+    cout << "Selecciona un curso por número: ";
+    cin >> cursoSeleccionado;
+
+    if (cursoSeleccionado < 1 || cursoSeleccionado > cursoMapa.size()) {
+        cout << "Selección de curso inválida.\n";
+        return;
+    }
+
+    string cursoSeleccionadoNombre = cursoMapa[cursoSeleccionado];
+
+    cout << "Estudiantes registrados en el curso " << cursoSeleccionadoNombre << ":\n";
+    for (const auto& estudiante : estudiantes) {
+        for (const auto& curso : estudiante.cursos) {
+            if (curso.nombre == cursoSeleccionadoNombre) {
+                cout << "Estudiante: " << estudiante.nombres << " " << estudiante.apellidos 
+                     << " | Nota Final: " << curso.notaFinal << endl;
+            }
+        }
+    }
+}
+
+void estadoDelCurso(vector<Estudiante>& estudiantes) {
+    if (estudiantes.empty()) {
+        cout << "No hay estudiantes registrados." << endl;
+        return;
+    }
+
+    set<string> cursosConNotas;
+    for (const auto& estudiante : estudiantes) {
+        for (const auto& curso : estudiante.cursos) {
+            if (curso.notaFinal != -1) { 
+                cursosConNotas.insert(curso.nombre);
+            }
+        }
+    }
+
+    if (cursosConNotas.empty()) {
+        cout << "No hay notas registradas para ningun curso." << endl;
+        return;
+    }
+
+    cout << "Cursos con notas registradas:" << endl;
+    int index = 1;
+    map<int, string> cursosMap; 
+    for (const auto& curso : cursosConNotas) {
+        cout << index << ". " << curso << endl;
+        cursosMap[index] = curso;
+        index++;
+    }
+
+    int cursoSeleccionado;
+    cout << "Seleccione el numero del curso para ver el estado de los estudiantes: ";
+    cin >> cursoSeleccionado;
+
+    if (cursosMap.find(cursoSeleccionado) == cursosMap.end()) {
+        cout << "Selección invalida." << endl;
+        return;
+    }
+
+    string cursoElegido = cursosMap[cursoSeleccionado];
+
+    cout << "Estudiantes en el curso " << cursoElegido << ":" << endl;
+    bool estudiantesConNotas = false;
+    for (const auto& estudiante : estudiantes) {
+        for (const auto& curso : estudiante.cursos) {
+            if (curso.nombre == cursoElegido && curso.notaFinal != -1) {
+                estudiantesConNotas = true;
+                cout << "Estudiante: " << estudiante.nombres << endl;
+                cout << "Nota final: " << curso.notaFinal << endl;
+                if (curso.notaFinal >= 60) {
+                    cout << "Estado: Aprobado" << endl;
+                } else {
+                    cout << "Estado: Reprobado" << endl;
+                }
+                cout << "-----------------------------" << endl;
+            }
+        }
+    }
+
+    if (!estudiantesConNotas) {
+        cout << "No hay estudiantes con notas registradas en este curso." << endl;
+    }
+}
+
+void controlNotas(vector<Estudiante>& estudiantes) {
+    int opcion;
+    do {
+        cout << "===============================" << endl;
+        cout << "Control de Notas" << endl;
+        cout << "===============================" << endl;
+        cout << "1. Registro de Notas Parciales" << endl;
+        cout << "2. Nota Final del Curso" << endl;
+        cout << "3. Estado del Curso (Aprobado/Reprobado)" << endl;
+        cout << "4. Regresar al menú principal" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        cin.ignore(); 
+
+        switch (opcion) {
+            case 1:
+                registroNotasParciales(estudiantes);
+                break;
+            case 2:
+                notaFinalDelCurso(estudiantes);
+                break;
+            case 3:controlNotas(estudiantes);
+                estadoDelCurso(estudiantes);
+                break;
+            case 4:
+                cout << "Regresando al menú principal..." << endl;
+                break;
+            default:
+                cout << "Opción no válida. Intente de nuevo." << endl;
+        }
+
+        cout << endl;
+
+    } while (opcion != 4);
+}
 void mostrarMenu() {	
     cout << "================================================================" << endl;
     cout << "Sistema de Registro Universitario" << endl;
@@ -475,7 +696,6 @@ void mostrarMenu() {
     cout << "4. Reportes Academicos" << endl;
     cout << "5. Salir" << endl; 
 }
-
 int main() {
     inicializarCursosSistemas(cursosSistemas);
     inicializarCursosCivil(cursosCivil);
@@ -494,7 +714,8 @@ int main() {
             case 2:
                 asignarCurso(estudiantes, carreraSeleccionadadd);
                 break;
-            case 3:
+            case 3: 
+		        controlNotas(estudiantes);
                 break;
             case 4:
 
