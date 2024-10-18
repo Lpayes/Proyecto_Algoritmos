@@ -248,6 +248,8 @@ void registrarEstudiante() {
     cout << "-----------------------------------------------------------------\n";
     municipio = seleccionarMunicipio(indiceDepartamento);
     cout << "-----------------------------------------------------------------\n";
+    
+    getline(cin, telefono_personal);
 
     do {
         telefono_personal= obtenerEntradaObligatoria("Ingrese el telefono personal (8 digitos): ");
@@ -756,6 +758,8 @@ void reportesAcademicos(const vector<Estudiante>& estudiantes) {
     cout << "Apellidos: " << estudiante.apellidos << endl;
     cout << "Codigo: " << estudiante.codigo << endl;
     cout << "Carrera: " << estudiante.carrera << endl; 
+    cout << "Municipio " << estudiante.municipio << endl;     
+    
 
     cout << "\nCursos Asignados:\n";
     if (estudiante.cursos.empty()) {
