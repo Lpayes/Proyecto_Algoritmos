@@ -279,7 +279,7 @@ void registrarEstudiante() {
     	fecha_nacimiento = obtenerEntradaObligatoria("Fecha no válida. Intente de nuevo (dd/mm/yyyy): ");
     }
 
-    cout << "Ingrese el año de ingreso a la universidad: "; 
+    cout << "Ingrese el anio de ingreso a la universidad: "; 
     while (true) {
         cin >> anio_ingreso;
         cout << "-----------------------------------------------------------------\n";
@@ -312,7 +312,7 @@ void registrarEstudiante() {
     cout << "Telefono de casa: " << telefono_casa << endl;
     cout << "Telefono de emergencia: " << telefono_emergencia << endl;
     cout << "Fecha de nacimiento: " << fecha_nacimiento << endl;
-    cout << "Año de ingreso: " << anio_ingreso << endl;
+    cout << "Anio de ingreso: " << anio_ingreso << endl;
     cout << "Correo electrónico: " << correo << endl;
     cout << "Edad: " << estudiante.edad << endl;
     
@@ -465,6 +465,9 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
     }
 }
 void registroNotasParciales(vector<Estudiante>& estudiantes) {
+	
+	cout << "-----------------------------------------------------------------\n";
+	
     if (estudiantes.empty()) {
         cout << "No hay estudiantes registrados.\n";
         return;
@@ -492,6 +495,7 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
         cout << "El estudiante no tiene cursos asignados.\n";
         return;
     }
+    cout << "-----------------------------------------------------------------\n";
 
     cout << "Cursos asignados a " << estudiante.nombres << " " << estudiante.apellidos << ":\n";
     for (int i = 0; i < estudiante.cursos.size(); i++) {
@@ -510,6 +514,8 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
     } while (cursoSeleccionado < 1 || cursoSeleccionado > estudiante.cursos.size());
 
     Curso& curso = estudiante.cursos[cursoSeleccionado - 1];
+    
+    cout << "-----------------------------------------------------------------\n";
 
     float nota1, nota2, notaExamen;
 
@@ -520,6 +526,8 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
             cout << "Nota invalida. Debe estar entre 0 y 15.\n";
         }
     } while (nota1 < 0 || nota1 > 15);
+    
+    cout << "-----------------------------------------------------------------\n";
 
     do {
         cout << "Ingrese la nota del segundo parcial para el curso " << curso.nombre << ": ";
@@ -528,6 +536,8 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
             cout << "Nota invalida. Debe estar entre 0 y 15.\n";
         }
     } while (nota2 < 0 || nota2 > 15);
+    
+    cout << "-----------------------------------------------------------------\n";
 
     do {
         cout << "Ingrese la nota del examen final para el curso " << curso.nombre << " (0 a 70): ";
@@ -536,6 +546,8 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
             cout << "Nota invalida. Debe estar entre 0 y 70.\n";
         }
     } while (notaExamen < 0 || notaExamen > 70);
+    
+    cout << "-----------------------------------------------------------------\n";
 
     curso.notasPrimerParcial = nota1;
     curso.notasSegundoParcial = nota2;
@@ -545,7 +557,12 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
 
     cout << "Notas registradas correctamente para el curso: " << curso.nombre << endl;
 }
+
+
 void notaFinalDelCurso(const vector<Estudiante>& estudiantes) {
+	
+	cout << "-----------------------------------------------------------------\n";
+
     if (estudiantes.empty()) {
         cout << "No hay estudiantes registrados.\n";
         return;
@@ -589,6 +606,9 @@ void notaFinalDelCurso(const vector<Estudiante>& estudiantes) {
 }
 
 void estadoDelCurso(vector<Estudiante>& estudiantes) {
+	
+	cout << "-----------------------------------------------------------------\n";
+	
     if (estudiantes.empty()) {
         cout << "No hay estudiantes registrados." << endl;
         return;
@@ -641,7 +661,7 @@ void estadoDelCurso(vector<Estudiante>& estudiantes) {
                 } else {
                     cout << "Estado: Reprobado" << endl;
                 }
-                cout << "-----------------------------" << endl;
+                cout << "-----------------------------------------------------------------\n";
             }
         }
     }
@@ -654,9 +674,9 @@ void estadoDelCurso(vector<Estudiante>& estudiantes) {
 void controlNotas(vector<Estudiante>& estudiantes) {
     int opcion;
     do {
-        cout << "===============================" << endl;
+        cout << "================================================================" << endl;
         cout << "Control de Notas" << endl;
-        cout << "===============================" << endl;
+        cout << "================================================================" << endl;
         cout << "1. Registro de Notas Parciales" << endl;
         cout << "2. Nota Final del Curso" << endl;
         cout << "3. Estado del Curso (Aprobado/Reprobado)" << endl;
@@ -672,7 +692,7 @@ void controlNotas(vector<Estudiante>& estudiantes) {
             case 2:
                 notaFinalDelCurso(estudiantes);
                 break;
-            case 3:controlNotas(estudiantes);
+            case 3:
                 estadoDelCurso(estudiantes);
                 break;
             case 4:
@@ -704,6 +724,8 @@ void calcularPromedio(const Estudiante& estudiante, float& promedioGeneral, int&
 }
 
 void reportesAcademicos(const vector<Estudiante>& estudiantes) {
+	
+    cout << "-----------------------------------------------------------------\n";
 
     if (estudiantes.empty()) {
         cout << "No hay estudiantes registrados.\n";
@@ -726,6 +748,8 @@ void reportesAcademicos(const vector<Estudiante>& estudiantes) {
     }
 
     const Estudiante& estudiante = estudiantes[estudianteSeleccionado - 1];
+    
+    cout << "-----------------------------------------------------------------\n";
 
     cout << "Datos Generales del Estudiante:\n";
     cout << "Nombres: " << estudiante.nombres << endl;
@@ -754,7 +778,9 @@ void reportesAcademicos(const vector<Estudiante>& estudiantes) {
             cout << "Nota Final: " << curso.notaFinal << endl;
             string estado = (curso.notaFinal >= 60) ? "Aprobado" : "Reprobado";
             cout << "Estado del Curso: " << estado << endl;
-            cout << "--------------------------------\n"; 
+            
+    cout << "-----------------------------------------------------------------\n";
+    
         }
     }
 
