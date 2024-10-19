@@ -187,10 +187,16 @@ int seleccionarCarrera() {
         cout << "2. Ingenieria Civil\n";
         cout << "Ingresa el numero de la carrera (1-2): ";
         cin >> carreraSeleccionada;
-        if (carreraSeleccionada < 1 || carreraSeleccionada > 2) {
-            cout << "Seleccion de carrera invalida. Debe ser un numero entre 1 y 2.\n";
+
+        if (cin.fail()) {
+            // Si la entrada es inválida (por ejemplo, una letra en lugar de un número)
+            cout << "Error: Debe ingresar un número válido.\n";
+            cin.clear(); // Limpia el error de cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignora la entrada incorrecta
+        } else if (carreraSeleccionada < 1 || carreraSeleccionada > 2) {
+            cout << "Selección de carrera inválida. Debe ser un número entre 1 y 2.\n";
         }
-    } while (carreraSeleccionada < 1 || carreraSeleccionada > 2); 
+    } while (carreraSeleccionada < 1 || carreraSeleccionada > 2 || cin.fail());
 
     return carreraSeleccionada; 
 }
@@ -467,97 +473,95 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
     }
 }
 void registroNotasParciales(vector<Estudiante>& estudiantes) {
-	
-	cout << "-----------------------------------------------------------------\n";
-	
     if (estudiantes.empty()) {
         cout << "No hay estudiantes registrados.\n";
         return;
     }
 
-    cout << "Seleccione un estudiante para registrar notas parciales: " << endl;
+   
+    cout << "Seleccione un estudiante para registrar notas parciales:\n";
     for (int i = 0; i < estudiantes.size(); i++) {
         cout << i + 1 << ". " << estudiantes[i].nombres << " " << estudiantes[i].apellidos 
              << " | Código: " << estudiantes[i].codigo << endl;
     }
 
+   
     int estudianteSeleccionado;
     do {
-        cout << "Selecciona un estudiante por numero: ";
+        cout << "Selecciona un estudiante por número: ";
         cin >> estudianteSeleccionado;
 
         if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
-            cout << "Selección de estudiante invalida. Por favor, seleccione un numero de estudiante valido." << endl;
+            cout << "Selección de estudiante inválida. Por favor, seleccione un número de estudiante válido." << endl;
         }
     } while (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size());
 
     Estudiante& estudiante = estudiantes[estudianteSeleccionado - 1];
 
+    
     if (estudiante.cursos.empty()) {
         cout << "El estudiante no tiene cursos asignados.\n";
         return;
     }
-    cout << "-----------------------------------------------------------------\n";
 
+    
     cout << "Cursos asignados a " << estudiante.nombres << " " << estudiante.apellidos << ":\n";
     for (int i = 0; i < estudiante.cursos.size(); i++) {
-        cout << i + 1 << ". " << estudiante.cursos[i].nombre << " (Codigo: " << estudiante.cursos[i].codigo << ")\n";
+        cout << i + 1 << ". " << estudiante.cursos[i].nombre << " (Código: " << estudiante.cursos[i].codigo << ")\n";
     }
 
     int cursoSeleccionado;
-    
     do {
-        cout << "Selecciona un curso por numero: ";
+        cout << "Selecciona un curso por número: ";
         cin >> cursoSeleccionado;
 
         if (cursoSeleccionado < 1 || cursoSeleccionado > estudiante.cursos.size()) {
-            cout << "Selección de curso invalida. Por favor, seleccione un numero de curso valido." << endl;
+            cout << "Selección de curso inválida. Por favor, seleccione un número de curso válido." << endl;
         }
     } while (cursoSeleccionado < 1 || cursoSeleccionado > estudiante.cursos.size());
 
     Curso& curso = estudiante.cursos[cursoSeleccionado - 1];
+
     
-    cout << "-----------------------------------------------------------------\n";
-
     float nota1, nota2, notaExamen;
-
+    
+  
     do {
-        cout << "Ingrese la nota del primer parcial para el curso " << curso.nombre << ": ";
+        cout << "Ingrese la nota del primer parcial para el curso " << curso.nombre << " (0 a 15): ";
         cin >> nota1;
         if (nota1 < 0 || nota1 > 15) {
-            cout << "Nota invalida. Debe estar entre 0 y 15.\n";
+            cout << "Nota inválida. Debe estar entre 0 y 15.\n";
         }
     } while (nota1 < 0 || nota1 > 15);
-    
-    cout << "-----------------------------------------------------------------\n";
 
+   
     do {
-        cout << "Ingrese la nota del segundo parcial para el curso " << curso.nombre << ": ";
+        cout << "Ingrese la nota del segundo parcial para el curso " << curso.nombre << " (0 a 15): ";
         cin >> nota2;
         if (nota2 < 0 || nota2 > 15) {
-            cout << "Nota invalida. Debe estar entre 0 y 15.\n";
+            cout << "Nota inválida. Debe estar entre 0 y 15.\n";
         }
     } while (nota2 < 0 || nota2 > 15);
-    
-    cout << "-----------------------------------------------------------------\n";
 
+    
     do {
         cout << "Ingrese la nota del examen final para el curso " << curso.nombre << " (0 a 70): ";
         cin >> notaExamen;
         if (notaExamen < 0 || notaExamen > 70) {
-            cout << "Nota invalida. Debe estar entre 0 y 70.\n";
+            cout << "Nota inválida. Debe estar entre 0 y 70.\n";
         }
     } while (notaExamen < 0 || notaExamen > 70);
-    
-    cout << "-----------------------------------------------------------------\n";
 
+    
     curso.notasPrimerParcial = nota1;
     curso.notasSegundoParcial = nota2;
     curso.notasExamenFinal = notaExamen;
 
+   
     curso.notaFinal = nota1 + nota2 + notaExamen;
 
     cout << "Notas registradas correctamente para el curso: " << curso.nombre << endl;
+    cout << "Nota Final: " << curso.notaFinal << "/100\n";
 }
 
 
