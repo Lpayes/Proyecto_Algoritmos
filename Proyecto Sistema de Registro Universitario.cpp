@@ -189,10 +189,10 @@ int seleccionarCarrera() {
         cin >> carreraSeleccionada;
 
         if (cin.fail()) {
-            // Si la entrada es inválida (por ejemplo, una letra en lugar de un número)
+            
             cout << "Error: Debe ingresar un número válido.\n";
-            cin.clear(); // Limpia el error de cin
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignora la entrada incorrecta
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
         } else if (carreraSeleccionada < 1 || carreraSeleccionada > 2) {
             cout << "Selección de carrera inválida. Debe ser un número entre 1 y 2.\n";
         }
@@ -400,7 +400,7 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
              << " | Codigo: " << estudiantes[i].codigo << endl;
     }
 
-    cout << "Selecciona un estudiante por nUmero: ";
+    cout << "Selecciona un estudiante por número: ";
     cin >> estudianteSeleccionado;
 
     if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
@@ -418,20 +418,33 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
     cout << "-----------------------------------------------------------------\n";
             
     
-    if (carreraSeleccionadad < 1 || carreraSeleccionadad > 2) {
-    cout << "Selección de carrera invalida. Debe ser un numero entre 1 y 2.\n";
-    return;
-}	            
+          if (semestreSeleccionada < 0 || semestreSeleccionada > 4) {
+        cout << "Selección de semestre inválida. Debe ser un número entre 0 y 4.\n";
+        return;
+    }
+
     vector<Curso> cursosElegidos;
-    switch (carreraSeleccionadad) {
+    switch (carreraSeleccionada) {
         case 1:
-            cursosElegidos = cursosSistemas[semestreSeleccionada];
+            
+            if (semestreSeleccionada < cursosSistemas.size()) {
+                cursosElegidos = cursosSistemas[semestreSeleccionada];
+            } else {
+                cout << "Semestre no válido para la carrera seleccionada.\n";
+                return;
+            }
             break;
         case 2:
-            cursosElegidos = cursosCivil[semestreSeleccionada];
+           
+            if (semestreSeleccionada < cursosCivil.size()) {
+                cursosElegidos = cursosCivil[semestreSeleccionada];
+            } else {
+                cout << "Semestre no válido para la carrera seleccionada.\n";
+                return;
+            }
             break;
         default:
-            cout << "Seleccion invalida.\n";
+            cout << "Selección inválida.\n";
             return;
     }
     cout << "-----------------------------------------------------------------\n";
@@ -837,7 +850,7 @@ int main() {
 				reportesAcademicos(estudiantes);
                 break;
             case 5:
-                cout << "" << endl;
+                cout << "Saliendo..." << endl;
                 break;
             default:
                 cout << "Opcion no valida. Intente de nuevo." << endl;
