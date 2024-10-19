@@ -90,39 +90,6 @@ vector<vector<string>> municipios = {
     {"Jutiapa", "Asunción Mita", "El Progreso", "Comapa", "El Adelanto", "Comapa", "Atescatempa", "Yupiltepeque", "Jerez", "San Jose Acatempa", "Moyuta", "Quesada", "Santa Catarina Mita"},
 };
 
-int contadorEstudiantes = 0;
-vector<Estudiante> estudiantes;
-
-
-bool validarFecha(const string& fecha) {
-    int dia, mes, anio;
-    sscanf(fecha.c_str(), "%d/%d/%d", &dia, &mes, &anio);
-    
-    if (anio < 1800 || anio > 2024) return false; 
-    if (mes < 1 || mes > 12) return false;
-    if (dia < 1 || dia > 31) return false;
-    
-    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) return false;
-    if (mes == 2) {
-        bool bisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
-        if (bisiesto && dia > 29) return false;
-        if (!bisiesto && dia > 28) return false;
-    }
-    return true;
-}
-
-string obtenerEntradaObligatoria(const string& mensaje) {
-    string entrada;
-    do {
-        cout << mensaje;
-        getline(cin, entrada);
-        if (entrada.empty()) {
-            cout << "Este campo es obligatorio. Intente de nuevo.\n";
-        }
-    } while (entrada.empty());
-    return entrada;
-}
-string deleccion;
 int seleccionarDepartamento() {
     cout << "Seleccione el departamento:" << endl;
     for (int i = 0; i < departamentos.size(); i++) {
@@ -162,6 +129,54 @@ string seleccionarMunicipio(int indiceDepartamento) {
     return municipios[indiceDepartamento][opcion - 1];
 }
 
+int contadorEstudiantes = 0;
+vector<Estudiante> estudiantes;
+
+
+bool validarFecha(const string& fecha) {
+    int dia, mes, anio;
+    sscanf(fecha.c_str(), "%d/%d/%d", &dia, &mes, &anio);
+    
+    if (anio < 1800 || anio > 2024) return false; 
+    if (mes < 1 || mes > 12) return false;
+    if (dia < 1 || dia > 31) return false;
+    
+    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) return false;
+    if (mes == 2) {
+        bool bisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+        if (bisiesto && dia > 29) return false;
+        if (!bisiesto && dia > 28) return false;
+    }
+    return true;
+}
+
+string obtenerEntradaObligatoria(const string& mensaje) {
+    string entrada;
+    do {
+        cout << mensaje;
+        getline(cin, entrada);
+        if (entrada.empty()) {
+            cout << "Este campo es obligatorio. Intente de nuevo.\n";
+        }
+    } while (entrada.empty());
+    return entrada;
+}
+
+bool validarTelefono(const string& telefono) {
+    if (telefono.length() != 8) {
+        return false;
+    }
+
+    int i = 0;
+    while (i < 8) {
+        if (telefono[i] < '0' || telefono[i] > '9') {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
+
 int seleccionarCarrera() {
     int carreraSeleccionada;
 
@@ -177,7 +192,7 @@ int seleccionarCarrera() {
             cin.clear(); 
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
         } else if (carreraSeleccionada < 1 || carreraSeleccionada > 2) {
-            cout << "Seleccion de carrera inválida. Debe ser un numero entre 1 y 2.\n";
+            cout << "Seleccion de carrera invalida. Debe ser un numero entre 1 y 2.\n";
         }
     } while (carreraSeleccionada < 1 || carreraSeleccionada > 2 || cin.fail());
 
@@ -196,104 +211,6 @@ string obtenerNombreCarrera(int _carreraSeleccionada) {
     }
     
     return carrera;
-}
-bool validarTelefono(const string& telefono) {
-    if (telefono.length() != 8) {
-        return false;
-    }
-
-    int i = 0;
-    while (i < 8) {
-        if (telefono[i] < '0' || telefono[i] > '9') {
-            return false;
-        }
-        i++;
-    }
-    return true;
-}
-
-int carreraSeleccionadadd;      
-void registrarEstudiante() {
-    string nombres, apellidos, carrera, departamento, municipio, aldea, telefono_personal, telefono_casa, telefono_emergencia, fecha_nacimiento;
-    int anio_ingreso, indiceDepartamento;
-    string correo;
-    cout << "-----------------------------------------------------------------\n";
-    
-    nombres=obtenerEntradaObligatoria("Ingrese los nombres del estudiante: ");
-    cout << "-----------------------------------------------------------------\n";
-    
-    apellidos=obtenerEntradaObligatoria("Ingrese los apellidos del estudiante: ");
-    cout << "-----------------------------------------------------------------\n";
-    
-    carreraSeleccionadadd = seleccionarCarrera();
-    carrera = obtenerNombreCarrera(carreraSeleccionadadd);
-   
-	cout << "-----------------------------------------------------------------\n";	    
-    
-    indiceDepartamento = seleccionarDepartamento();
-
-    cout << "-----------------------------------------------------------------\n";
-    municipio = seleccionarMunicipio(indiceDepartamento);
-    cout << "-----------------------------------------------------------------\n";
-    
-    getline(cin, telefono_personal);
-
-    do {
-        telefono_personal= obtenerEntradaObligatoria("Ingrese el telefono personal (8 digitos): ");
-        cout << "-----------------------------------------------------------------\n";
-        if (!validarTelefono(telefono_personal)) {
-            cout << "Numero de teléfono inválido. Debe contener solo 8 digitos numericos.\n";
-        }
-    } while (!validarTelefono(telefono_personal));
-    
-    do {
-        telefono_casa= obtenerEntradaObligatoria("Ingrese el telefono de casa (8 digitos): ");
-        cout << "-----------------------------------------------------------------\n";
-        if (!validarTelefono(telefono_casa)) {
-            cout << "Numero de telefono invalido. Debe contener solo 8 digitos numericos.\n";
-        }
-    } while (!validarTelefono(telefono_casa));
-    
-       do { 
-        telefono_emergencia= obtenerEntradaObligatoria("Ingrese el telefono de emergencia (8 digitos): ");
-        cout << "-----------------------------------------------------------------\n";
-        if (!validarTelefono(telefono_emergencia)) {
-            cout << "Numero de telefono invalido. Debe contener solo 8 digitos numericos.\n";
-        }
-    } while (!validarTelefono(telefono_emergencia));
-	   
-    fecha_nacimiento= obtenerEntradaObligatoria("Ingrese la fecha de nacimiento (dd/mm/yyyy): ");
-    cout << "-----------------------------------------------------------------\n";
-    while (!validarFecha(fecha_nacimiento)) {
-    	fecha_nacimiento = obtenerEntradaObligatoria("Fecha no válida. Intente de nuevo (dd/mm/yyyy): ");
-        cout << "-----------------------------------------------------------------\n";}
-
-    cout << "Ingrese el anio de ingreso a la universidad: "; 
-    while (true) {
-        cin >> anio_ingreso;
-        if (cin.fail() || anio_ingreso < 1900 || anio_ingreso > 2024) { 
-            cin.clear(); 
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no valida. Intente de nuevo: ";
-        } else {
-            break; 
-        }
-    }
-    
-    cin.ignore(); 
-	cout << "-----------------------------------------------------------------\n";
-    correo = obtenerEntradaObligatoria("Ingrese el correo electronico: "); 
-    
-    cout << "-----------------------------------------------------------------\n";
-
-     Estudiante estudiante(nombres, apellidos, carrera, indiceDepartamento, municipio, aldea, 
-                          telefono_personal, telefono_casa, telefono_emergencia, 
-                          fecha_nacimiento, anio_ingreso, correo, contadorEstudiantes);
-
-    cout << "\nEstudiante registrado con exito!\n";
-    estudiantes.push_back(estudiante);
-    contadorEstudiantes++;
-    cout << "-----------------------------------------------------------------\n";
 }
 
 void inicializarCursosSistemas(vector<vector<Curso>>& cursosSistemas) {
@@ -354,6 +271,90 @@ void inicializarCursosCivil(vector<vector<Curso>>& cursosCivil) {
 vector<vector<Curso>> cursosSistemas(5);
 vector<vector<Curso>> cursosCivil(5);
 
+int carreraSeleccionadadd;      
+void registrarEstudiante() {
+    string nombres, apellidos, carrera, departamento, municipio, aldea, telefono_personal, telefono_casa, telefono_emergencia, fecha_nacimiento;
+    int anio_ingreso, indiceDepartamento;
+    string correo;
+    cout << "-----------------------------------------------------------------\n";
+    
+    nombres=obtenerEntradaObligatoria("Ingrese los nombres del estudiante: ");
+    cout << "-----------------------------------------------------------------\n";
+    
+    apellidos=obtenerEntradaObligatoria("Ingrese los apellidos del estudiante: ");
+    cout << "-----------------------------------------------------------------\n";
+    
+    carreraSeleccionadadd = seleccionarCarrera();
+    carrera = obtenerNombreCarrera(carreraSeleccionadadd);
+   
+	cout << "-----------------------------------------------------------------\n";	    
+    
+    indiceDepartamento = seleccionarDepartamento();
+
+    cout << "-----------------------------------------------------------------\n";
+    municipio = seleccionarMunicipio(indiceDepartamento);
+    cout << "-----------------------------------------------------------------\n";
+    
+    getline(cin, telefono_personal);
+
+    do {
+        telefono_personal= obtenerEntradaObligatoria("Ingrese el telefono personal (8 digitos): ");
+        cout << "-----------------------------------------------------------------\n";
+        if (!validarTelefono(telefono_personal)) {
+            cout << "Numero de telefono inválido. Debe contener solo 8 digitos numericos.\n";
+        }
+    } while (!validarTelefono(telefono_personal));
+    
+    do {
+        telefono_casa= obtenerEntradaObligatoria("Ingrese el telefono de casa (8 digitos): ");
+        cout << "-----------------------------------------------------------------\n";
+        if (!validarTelefono(telefono_casa)) {
+            cout << "Numero de telefono invalido. Debe contener solo 8 digitos numericos.\n";
+        }
+    } while (!validarTelefono(telefono_casa));
+    
+       do { 
+        telefono_emergencia= obtenerEntradaObligatoria("Ingrese el telefono de emergencia (8 digitos): ");
+        cout << "-----------------------------------------------------------------\n";
+        if (!validarTelefono(telefono_emergencia)) {
+            cout << "Numero de telefono invalido. Debe contener solo 8 digitos numericos.\n";
+        }
+    } while (!validarTelefono(telefono_emergencia));
+	   
+    fecha_nacimiento= obtenerEntradaObligatoria("Ingrese la fecha de nacimiento (dd/mm/yyyy): ");
+    cout << "-----------------------------------------------------------------\n";
+    while (!validarFecha(fecha_nacimiento)) {
+    	fecha_nacimiento = obtenerEntradaObligatoria("Fecha no válida. Intente de nuevo (dd/mm/yyyy): ");
+        cout << "-----------------------------------------------------------------\n";}
+
+    cout << "Ingrese el anio de ingreso a la universidad: "; 
+    while (true) {
+        cin >> anio_ingreso;
+        if (cin.fail() || anio_ingreso < 1900 || anio_ingreso > 2024) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada no valida. Intente de nuevo: ";
+        } else {
+            break; 
+        }
+    }
+    
+    cin.ignore(); 
+	cout << "-----------------------------------------------------------------\n";
+    correo = obtenerEntradaObligatoria("Ingrese el correo electronico: "); 
+    
+    cout << "-----------------------------------------------------------------\n";
+
+     Estudiante estudiante(nombres, apellidos, carrera, indiceDepartamento, municipio, aldea, 
+                          telefono_personal, telefono_casa, telefono_emergencia, 
+                          fecha_nacimiento, anio_ingreso, correo, contadorEstudiantes);
+
+    cout << "\nEstudiante registrado con exito!\n";
+    estudiantes.push_back(estudiante);
+    contadorEstudiantes++;
+    cout << "-----------------------------------------------------------------\n";
+}
+
 void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
 	cout << "-----------------------------------------------------------------\n";
     if (estudiantes.empty()) {
@@ -367,12 +368,19 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
              << " | Codigo: " << estudiantes[i].codigo << endl;
     }
 
-    cout << "Selecciona un estudiante por número: ";
+    cout << "Selecciona un estudiante por numero: ";
     cin >> estudianteSeleccionado;
 
-    if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
-        cout << "Selección de estudiante inválida, seleccione de nuevo.\n";
-    }
+    if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada invalida. Por favor ingrese un numero.\n";
+            estudianteSeleccionado = 0;
+        } else if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
+            cout << "Seleccion de estudiante invalida, seleccione de nuevo.\n";
+            cout << "-----------------------------------------------------------------\n";                                    
+        }
+
     } while (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size());
     
     cout << "-----------------------------------------------------------------\n";
@@ -386,7 +394,7 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
             
     
           if (semestreSeleccionada < 0 || semestreSeleccionada > 4) {
-        cout << "Selección de semestre inválida. Debe ser un número entre 0 y 4.\n";
+        cout << "Seleccion de semestre invalida. Debe ser un numero entre 0 y 4.\n";
         return;
     }
 
@@ -397,7 +405,7 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
             if (semestreSeleccionada < cursosSistemas.size()) {
                 cursosElegidos = cursosSistemas[semestreSeleccionada];
             } else {
-                cout << "Semestre no válido para la carrera seleccionada.\n";
+                cout << "Semestre no valido para la carrera seleccionada.\n";
                 return;
             }
             break;
@@ -411,7 +419,7 @@ void asignarCurso(vector<Estudiante>& estudiantes, int carreraSeleccionada) {
             }
             break;
         default:
-            cout << "Selección inválida.\n";
+            cout << "Seleccion invalida.\n";
             return;
     }
     cout << "-----------------------------------------------------------------\n";
@@ -572,7 +580,7 @@ void notaFinalDelCurso(const vector<Estudiante>& estudiantes) {
         cout << "-----------------------------------------------------------------\n";
         
     int cursoSeleccionado;
-    cout << "Selecciona un curso por número: ";
+    cout << "Selecciona un curso por numero: ";
     cin >> cursoSeleccionado;
 
     if (cursoSeleccionado < 1 || cursoSeleccionado > cursoMapa.size()) {
