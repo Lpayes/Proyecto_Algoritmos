@@ -472,12 +472,12 @@ void registroNotasParciales(vector<Estudiante>& estudiantes) {
     cout << "Seleccione un estudiante para registrar notas parciales:\n";
     for (int i = 0; i < estudiantes.size(); i++) {
         cout << i + 1 << ". " << estudiantes[i].nombres << " " << estudiantes[i].apellidos 
-             << " | Código: " << estudiantes[i].codigo << endl;
+             << " | Codigo: " << estudiantes[i].codigo << endl;
     }
 
     int estudianteSeleccionado;
     do {
-        cout << "Selecciona un estudiante por número: ";
+        cout << "Selecciona un estudiante por numero: ";
         cin >> estudianteSeleccionado;
 
         if (estudianteSeleccionado < 1 || estudianteSeleccionado > estudiantes.size()) {
